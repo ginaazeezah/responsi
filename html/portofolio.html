@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio Publik</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #fffde7;
+      font-family: 'Poppins', sans-serif;
+      color: #5d4300;
+    }
+
+    header {
+      background: linear-gradient(135deg, #fff176, #fbc02d);
+      color: #5d4300;
+      padding: 2rem 0;
+      text-align: center;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      margin-top: 40px;
+      color: #c49000;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .card {
+      border: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .about {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+
+    .about img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 3px solid #fbc02d;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px 0;
+      background: #fff8e1;
+      border-top: 1px solid #f0d000;
+      text-align: center;
+    }
+
+    .login-btn {
+      display: inline-block;
+      padding: 10px 25px;
+      background: #fdd835;
+      color: #5d4300;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+      margin-top: 10px;
+      font-weight: 600;
+      border: none;
+    }
+
+    .login-btn:hover {
+      background: #fbc02d;
+      color: #fff;
+    }
+
+    .btn-outline-primary {
+      border-color: #fbc02d;
+      color: #5d4300;
+    }
+
+    .btn-outline-primary:hover {
+      background: #fbc02d;
+      color: #fff;
+      border-color: #fbc02d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ user[3] }}</h1>
+    <p>Mahasiswa Informatika | Universitas Teknologi Yogyakarta</p>
+  </header>
+
+  <div class="container mt-5">
+    <!-- ABOUT ME -->
+    <div class="about text-center">
+      {% if user and user[5] %}
+      <img src="static/gina.png" alt="Foto Profil">
+      {% endif %}
+      <h2>Tentang Saya</h2>
+      {% if user %}
+      <p class="text-muted">{{ user[4] }}</p>
+      {% endif %}
+    </div>
+
+    <!-- SKILLS -->
+    <h3 class="section-title">Skills</h3>
+    <div class="row mt-4">
+      {% for skill in skills %}
+      <div class="col-md-4 mb-4">
+        <div class="card text-center p-3">
+          {% if skill[3] %}
+          <img src="{{ url_for('static', filename='icons/' ~ skill[3]) }}" width="40" class="mx-auto mb-2" alt="icon">
+          {% endif %}
+          <h5>{{ skill[1] }}</h5>
+          <p class="text-muted">{{ skill[2] }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- PROJECTS -->
+    <h3 class="section-title">Proyek</h3>
+    <div class="row mt-4">
+      {% for project in projects %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          {% if project[3] %}
+          <img src="{{ url_for('static', filename='projects/' ~ project[3]) }}" class="card-img-top" alt="{{ project[1] }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ project[1] }}</h5>
+            <p class="card-text">{{ project[2] }}</p>
+            {% if project[4] %}
+            <a href="{{ project[4] }}" class="btn btn-outline-primary btn-sm" target="_blank">Lihat Project</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="text-muted mb-2">© 2025 Portfolio Pribadi</p>
+    <a href="/login" class="login-btn">Login Admin</a>
+  </footer>
+</body>
+</html>

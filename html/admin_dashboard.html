@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fff176, #fbc02d);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      color: #5d4300 !important;
+    }
+
+    .btn-logout {
+      background: #f57f17;
+      color: white;
+      border: none;
+    }
+
+    .btn-logout:hover {
+      background: #e65100;
+    }
+
+    .container-box {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+
+    h3 {
+      color: #5d4300;
+      font-weight: 600;
+    }
+
+    .table thead {
+      background-color: #fbc02d;
+      color: #5d4300;
+    }
+
+    .btn-edit {
+      background: #fdd835;
+      color: #5d4300;
+      border: none;
+    }
+
+    .btn-edit:hover {
+      background: #fbc02d;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #ef5350;
+      color: white;
+      border: none;
+    }
+
+    .btn-delete:hover {
+      background: #d32f2f;
+    }
+
+    .btn-add {
+      background: #fff176;
+      color: #5d4300;
+      border: none;
+    }
+
+    .btn-add:hover {
+      background: #fbc02d;
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 15px;
+      color: #5d4300;
+    }
+
+    .alert {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="#">Dashboard Admin</a>
+      <div class="d-flex">
+        <a href="{{ url_for('edit_profile') }}" class="btn btn-warning me-2">Edit Profil</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="container my-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="container-box">
+      <h3>Profil</h3>
+      {% if user %}
+        <p><strong>Nama:</strong> {{ user[3] }}</p>
+        <p><strong>Bio:</strong> {{ user[4] }}</p>
+      {% endif %}
+    </div>
+
+    <!-- SKILLS -->
+    <div class="container-box mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Skills</h3>
+        <a href="#" class="btn btn-add btn-sm">+ Tambah Skill</a>
+      </div>
+
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Nama Skill</th>
+            <th>Deskripsi</th>
+            <th style="width: 160px;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in skills %}
+          <tr>
+            <td>{{ s[1] }}</td>
+            <td>{{ s[2] }}</td>
+            <td>
+              <a href="{{ url_for('edit_skill', id=s[0]) }}" class="btn btn-sm btn-edit">Edit</a>
+              <a href="{{ url_for('delete_skill', id=s[0]) }}" class="btn btn-sm btn-delete"
+                 onclick="return confirm('Yakin ingin menghapus skill ini?')">Hapus</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-center text-muted">Belum ada data skill</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="container-box mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Projects</h3>
+        <a href="#" class="btn btn-add btn-sm">+ Tambah Project</a>
+      </div>
+
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Nama Project</th>
+            <th>Deskripsi</th>
+            <th>Link</th>
+            <th style="width: 160px;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in projects %}
+          <tr>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>
+              {% if p[4] %}
+              <a href="{{ p[4] }}" target="_blank" class="text-decoration-none text-primary">Lihat</a>
+              {% else %}
+              <span class="text-muted">-</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('edit_project', id=p[0]) }}" class="btn btn-sm btn-edit">Edit</a>
+              <a href="{{ url_for('delete_project', id=p[0]) }}" class="btn btn-sm btn-delete"
+                 onclick="return confirm('Yakin ingin menghapus project ini?')">Hapus</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-muted">Belum ada data project</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Dashboard Admin Portofolio</p>
+  </footer>
+</body>
+</html>
